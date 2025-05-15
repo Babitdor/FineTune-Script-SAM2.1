@@ -1,0 +1,14 @@
+base_dir: "./"
+src_root: "./dataset/SENSATION_DS"
+dst_root: "./dataset/SENSATION_DS_Preprocessed/"
+size: [1024, 1024]
+splits:
+  - training
+  - validation
+sidewalk_class_id: 2 # Represents the class Sidewalk as per the RGB Mask
+num_pos_points: 3
+num_neg_points: 5
+point_propmpt_strategy: "random"
+
+gt_mask: "../dataset/SENSATION_DS_Preprocessed/training/masks/"
+prompts_path: "../dataset/SENSATION_DS_Preprocessed/training/prompts/"
