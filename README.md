@@ -1,1 +1,1 @@
-# FineTune_SAM2.1_for_Sidewalk_segmentation
+# FineTune_SAM2.1_for_sidewalk_segmentation
