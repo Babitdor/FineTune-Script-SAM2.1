@@ -1,0 +1,1 @@
+# FineTune_SAM2.1_for_Sidewalk_segmentation
