@@ -34,9 +34,7 @@ def preprocess_split(
 
     with open(manifest_path, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
-        writer.writerow(
-            ["image_path", "mask_path", "positive_points", "negative_points"]
-        )
+        writer.writerow(["image_path", "mask_path", "input_points", "input_labels"])
 
         for img_name in tqdm(image_files, desc=f"Processing {split}"):
 
@@ -47,7 +45,9 @@ def preprocess_split(
 
             img_resized, mask_binary = resize(img_path, mask_path, size)
 
-            prompts = setup_prompt_points(mask_binary, point_strat, num_pos, num_neg)
+            input_pts, input_labels = setup_prompt_points(
+                mask_binary, point_strat, num_pos, num_neg
+            )
 
             # Save processed image
             out_img_path = os.path.join(out_img_dir, img_name)
@@ -67,18 +67,18 @@ def preprocess_split(
             )
 
             with open(out_prompt_path, "w") as f:
-                json.dump(prompts, f)
+                json.dump({"input_points": input_pts, "input_labels": input_labels}, f)
 
             # Extract positive and negative points
-            pos_points = [p["coord"] for p in prompts if p["label"] == 1]
-            neg_points = [p["coord"] for p in prompts if p["label"] == 0]
+            # pos_points = [p["coord"] for p in prompts if p["label"] == 1]
+            # neg_points = [p["coord"] for p in prompts if p["label"] == 0]
 
             writer.writerow(
                 [
                     out_img_path,
                     side_walk_mask_path,
-                    json.dumps(pos_points),
-                    json.dumps(neg_points),
+                    json.dumps(input_pts),
+                    json.dumps(input_labels),
                 ]
             )
 

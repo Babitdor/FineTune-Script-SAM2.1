@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 import yaml
 
 
-def visualize_points_on_mask(mask_path, prompts):
+def visualize_points_on_mask(mask_path, input_points, input_labels):
     mask = cv2.imread(mask_path, cv2.IMREAD_GRAYSCALE)
     if mask is None:
         print(f"[WARNING] Could not read mask: {mask_path}")
@@ -16,13 +16,10 @@ def visualize_points_on_mask(mask_path, prompts):
     # Convert mask to color for visualization
     mask_color = cv2.cvtColor(mask, cv2.COLOR_GRAY2BGR)
 
-    for prompt in prompts:
-        x, y = prompt["coord"]
-        if prompt["label"] == 1:
-            color = (0, 255, 0)  # Green for positive
-        else:
-            color = (255, 0, 0)  # Red for negative
-        cv2.circle(mask_color, (x, y), radius=6, color=color, thickness=-1)
+    for coord, label in zip(input_points, input_labels):
+        x, y = coord
+        color = (0, 255, 0) if label == 1 else (255, 0, 0)
+        cv2.circle(mask_color, (int(x), int(y)), radius=6, color=color, thickness=-1)
 
     # Convert BGR (OpenCV) to RGB for matplotlib
     mask_color_rgb = cv2.cvtColor(mask_color, cv2.COLOR_BGR2RGB)
@@ -43,11 +40,7 @@ if __name__ == "__main__":
     PROMPTS_PATH = config["prompts_path"]
 
     SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-    masks_root = os.path.join(
-        SCRIPT_DIR,
-        GT_MASK,
-    )
-
+    masks_root = os.path.join(SCRIPT_DIR, GT_MASK)
     prompts_root = os.path.join(SCRIPT_DIR, PROMPTS_PATH)
 
     subfolders = [
@@ -70,7 +63,9 @@ if __name__ == "__main__":
             continue
 
         with open(prompt_file, "r") as f:
-            prompts = json.load(f)
+            prompt_data = json.load(f)
+            input_points = prompt_data.get("input_points", [])
+            input_labels = prompt_data.get("input_labels", [])
 
         # Get all mask image files
         mask_files = [
@@ -88,4 +83,4 @@ if __name__ == "__main__":
         mask_path = os.path.join(mask_dir, chosen_mask)
 
         print(f"[INFO] Showing: {mask_path}")
-        visualize_points_on_mask(mask_path, prompts)
+        visualize_points_on_mask(mask_path, input_points, input_labels)

@@ -42,15 +42,11 @@ def save_binary_masks_of_sidewalk(mask, out_dir, base_name):
 # Function to pick point prompts
 def setup_prompt_points(mask, strategy="random", num_pos_points=5, num_neg_points=6):
     """
-
-    Sets up:
-        1. Select Positive points based on strategy for our intended class_label binary mask (here in this case (sidewalk) which is class_id = 2)
-        2. Select Negative points (1 point) for all other class labels
-
+    Returns:
+        input_points: list of (x, y) tuples, positives first then negatives
+        input_labels: list of 1s (for positives) then 0s (for negatives)
     """
-
     sidewalk_class_id = 2
-    prompts = []
     pos_pts = np.argwhere(mask == sidewalk_class_id)
     neg_pts = np.argwhere(mask != sidewalk_class_id)
 
@@ -63,7 +59,6 @@ def setup_prompt_points(mask, strategy="random", num_pos_points=5, num_neg_point
             idx = random.randint(0, len(points) - 1)
         elif strategy == "hybrid":
             if len(points) > 1:
-                # Randomly choose between center and random selection
                 if random.choice([True, False]):
                     idx = len(points) // 2
                 else:
@@ -72,24 +67,30 @@ def setup_prompt_points(mask, strategy="random", num_pos_points=5, num_neg_point
                 idx = 0
         else:
             raise ValueError(f"Unknown strategy: {strategy}")
-
-        # Convert numpy.int64 to native Python int and return (x, y)
         x = int(points[idx][1])
         y = int(points[idx][0])
         return (x, y)
 
-    # Add positive points
+    # Collect positive points and labels
+    pos_points = []
+    pos_labels = []
     for _ in range(num_pos_points):
         pos_point = pick(pos_pts, strategy)
-        if pos_point and pos_point not in [
-            p["coord"] for p in prompts
-        ]:  # Avoid duplicates
-            prompts.append({"coord": pos_point, "label": 1})
+        if pos_point and pos_point not in pos_points:
+            pos_points.append(pos_point)
+            pos_labels.append(1)
 
-    # Add negative points
+    # Collect negative points and labels
+    neg_points = []
+    neg_labels = []
     for _ in range(num_neg_points):
-        neg_point = pick(neg_pts, "random")  # Always use random for background
-        if neg_point and neg_point not in [p["coord"] for p in prompts]:
-            prompts.append({"coord": neg_point, "label": 0})
+        neg_point = pick(neg_pts, "random")
+        if neg_point and neg_point not in neg_points:
+            neg_points.append(neg_point)
+            neg_labels.append(0)
 
-    return prompts
+    # Concatenate positives and negatives
+    input_points = pos_points + neg_points
+    input_labels = pos_labels + neg_labels
+
+    return input_points, input_labels

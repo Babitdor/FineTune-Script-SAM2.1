@@ -12,3 +12,6 @@ point_propmpt_strategy: "random"
 
 gt_mask: "../dataset/SENSATION_DS_Preprocessed/training/masks/"
 prompts_path: "../dataset/SENSATION_DS_Preprocessed/training/prompts/"
+
+manifest_train_path: "dataset/SENSATION_DS_Preprocessed/training/manifest_training.csv"
+manifest_val_path: "dataset/SENSATION_DS_Preprocessed/training/manifest_validation.csv"
