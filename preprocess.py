@@ -69,10 +69,6 @@ def preprocess_split(
             with open(out_prompt_path, "w") as f:
                 json.dump({"input_points": input_pts, "input_labels": input_labels}, f)
 
-            # Extract positive and negative points
-            # pos_points = [p["coord"] for p in prompts if p["label"] == 1]
-            # neg_points = [p["coord"] for p in prompts if p["label"] == 0]
-
             writer.writerow(
                 [
                     out_img_path,

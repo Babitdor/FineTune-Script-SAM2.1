@@ -1,0 +1,40 @@
+TRAIN_MANIFEST: "dataset/SENSATION_DS_Preprocessed/training/manifest_training.csv"
+VAL_MANIFEST: "dataset/SENSATION_DS_Preprocessed/validation/manifest_validation.csv"
+
+pretrained_model_path: sam2.1_hiera_small.pt
+config_file_path: sam2/configs/sam2.1/sam2.1_hiera_s.yaml
+freeze_prompt_encoder: true
+train_mask_decoder: true
+save_best_only: true
+
+optimizer:
+        type: AdamW
+        LEARNING_RATE: 0.0001
+        WEIGHT_DECAY: 0.00004
+
+schedular:
+        type: ReduceLROnPlateau
+        mode: min
+        factor: 0.5
+        patience: 5
+
+epochs: 20
+steps_per_epoch: 500
+device: cuda # or cpu
+seed: 42
+
+log_dir: logs/training_run_1
+checkpoint_path: model/best_model.pth
+save_best_only: true
+tensorboard_logging: true
+
+loss:
+        type: SegmentationLoss
+        bce_weight: 1.0
+        dice_weight: 1.0
+        score_weight: 1.0
+
+postprocess:
+        threshold: 0.5
+        apply_sigmoid: true
+        resize_to_original: true
