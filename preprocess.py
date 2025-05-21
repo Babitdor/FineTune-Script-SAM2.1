@@ -91,7 +91,7 @@ if __name__ == "__main__":
     SIDEWALK_CLASS_ID = config["sidewalk_class_id"]
     NUM_POS_POINTS = config["num_pos_points"]
     NUM_NEG_POINTS = config["num_neg_points"]
-    PROMPT_STRAT = config["point_propmpt_strategy"]
+    PROMPT_STRAT = config["point_prompt_strategy"]
 
 for folder in SPLITS:
     preprocess_split(

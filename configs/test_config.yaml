@@ -1,0 +1,49 @@
+paths:
+  raw_data_dir: "./dataset/SENSATION_DS"
+  processed_data_dir: "./dataset/SENSATION_DS_Preprocessed"
+  training_data_dir: "./dataset/SENSATION_DS_Preprocessed/training"
+  validation_data_dir: "./dataset/SENSATION_DS_Preprocessed/validation"
+  testing_data_dir: "./dataset/SENSATION_DS_Preprocessed/testing"
+
+preprocessing:
+  size: [1024, 1024]
+  sidewalk_class_id: 2 # Represents the class Sidewalk as per the RGB Mask
+  num_pos_points: 3
+  num_neg_points: 5
+  point_prompt_strategy: "random"
+  gt_mask_dir: "./dataset/SENSATION_DS_Preprocessed/training/masks"
+  prompts_path: "./dataset/SENSATION_DS_Preprocessed/training/prompts"
+
+training:
+  manifest_train_path: "./dataset/SENSATION_DS_Preprocessed/training/manifest_training.csv"
+  manifest_val_path: "./dataset/SENSATION_DS_Preprocessed/training/manifest_validation.csv"
+  manifest_test_path: "./dataset/SENSATION_DS_Preprocessed/testing/manifest_testing.csv"
+  num_workers: 4
+  epochs: 10
+  learning_rate: 0.001
+  weight_decay: 0.0001
+
+model:
+  name: "SidewalkSegmentationModel"
+  pretrained: true
+  num_classes: 3 # Number of classes in the dataset (including background)
+  input_channels: 3 # Number of input channels (e.g., RGB)
+  output_channels: 1 # Number of output channels (e.g., binary segmentation)
+  backbone: "resnet50" # Backbone architecture
+  pretrained_backbone: true # Use a pretrained backbone
+  dropout_rate: 0.5 # Dropout rate for regularization
+
+inference:
+  manifest_test_path: "./dataset/SENSATION_DS_Preprocessed/testing/manifest_testing.csv"
+  output_dir: "./dataset/SENSATION_DS_Preprocessed/testing/inference_results"
+  batch_size: 4
+  num_workers: 4
+  threshold: 0.5 # Threshold for binary segmentation
+  save_predictions: true # Save the predicted masks
+
+logging:
+  log_dir: "./logs"
+  log_level: "INFO" # Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+  log_format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  save_logs: true # Save logs to a file
+  log_file: "training.log" # Log file name

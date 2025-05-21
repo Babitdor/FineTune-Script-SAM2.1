@@ -5,7 +5,6 @@ pretrained_model_path: sam2.1_hiera_small.pt
 config_file_path: sam2/configs/sam2.1/sam2.1_hiera_s.yaml
 freeze_prompt_encoder: true
 train_mask_decoder: true
-save_best_only: true
 
 optimizer:
         type: AdamW

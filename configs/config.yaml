@@ -6,9 +6,10 @@ size: [1024, 1024]
 splits:
   - training
   - validation
+  - testing
 
 sidewalk_class_id: 2 # Represents the class Sidewalk as per the RGB Mask
-num_pos_points: 3
+num_pos_points: 5
 num_neg_points: 5
 point_prompt_strategy: "random"
 

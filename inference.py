@@ -8,9 +8,9 @@ import random
 from scripts.utils import post_process
 
 # Paths
-MODEL_PATH = "model/sam2_final_model.pt"
+MODEL_PATH = "model/sam2_sidewalk_model.pt"
 CONFIG_PATH = r"D:\FAU\Semester_3\Project II\sam2\sidewalk_training\sam2\configs\sam2.1\sam2.1_hiera_b+.yaml"
-TEST_MANIFEST = "dataset/SENSATION_DS_Preprocessed/training/manifest_training.csv"
+TEST_MANIFEST = "dataset/SENSATION_DS_Preprocessed/testing/manifest_testing.csv"
 
 # Load model
 device = "cuda" if torch.cuda.is_available() else "cpu"
