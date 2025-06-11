@@ -1,4 +1,4 @@
-# Sam2.1_fine_tuning_for_sidewalk_segmentation
+# Sam2.1_fine_tuning_for_any_class_object
 
 
 
