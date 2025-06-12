@@ -1,0 +1,29 @@
+# Dataset path
+base_dir: "./"
+src_root: "./dataset/SENSATION_DS"
+dst_root: "./dataset/SENSATION_DS_Preprocessed"
+
+# Image Size Resize
+size: 1024
+
+# Folder Splits of Dataset
+splits:
+  - training
+  - validation
+  - testing
+
+# Class ID of the Object of interest, to be segmented.
+class_id: 2
+
+# Point Prompt Selection Parameters
+num_pos_points: 10
+num_neg_points: 5
+point_prompt_strategy: "gaussian"
+
+# Preprocessed Dataset Path Destination
+gt_mask: "./dataset/SENSATION_DS_Preprocessed/training/masks"
+prompts_path: "./dataset/SENSATION_DS_Preprocessed/training/prompts"
+
+# Preprocessed Dataset Manifest
+manifest_train_path: "./dataset/SENSATION_DS_Preprocessed/training/manifest_training.csv"
+manifest_val_path: "./dataset/SENSATION_DS_Preprocessed/training/manifest_validation.csv"
