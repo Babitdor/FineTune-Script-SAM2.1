@@ -2,13 +2,13 @@ import os
 import torch
 import numpy as np
 import matplotlib.pyplot as plt
-from dataloader import SENSATIONDataset
+from scripts.dataloader import SENSATIONDataset
 from sam2 import build_sam, sam2_image_predictor
 import random
 from scripts.utils import post_process
 
 # Paths
-MODEL_PATH = "model/sam2_sidewalk_model.pt"
+MODEL_PATH = "models/final_model.pt"
 CONFIG_PATH = r"D:\FAU\Semester_3\Project II\sam2\sidewalk_training\sam2\configs\sam2.1\sam2.1_hiera_b+.yaml"
 TEST_MANIFEST = "dataset/SENSATION_DS_Preprocessed/testing/manifest_testing.csv"
 
@@ -80,34 +80,34 @@ with torch.no_grad():
             image_pe=predictor.model.sam_prompt_encoder.get_dense_pe(),
             sparse_prompt_embeddings=sparse_embeddings,
             dense_prompt_embeddings=dense_embeddings,
-            multimask_output=True,
+            multimask_output=False,
             repeat_image=batched_mode,
             high_res_features=high_res_features,
         )
         prd_masks = predictor._transforms.postprocess_masks(
             low_res_masks, predictor._orig_hw[-1]
         )
-        prd_mask = prd_masks[:, 0].cpu().numpy().squeeze()
-        pred_bin_mask_pro = post_process(
-            prd_mask, thresh=0.7, open_k=3, close_k=3, smooth=False, iterations=1
-        )
-
+        prd_masks = (prd_masks > 0.5).float()
         # Visualization
-        plt.figure(figsize=(12, 4))
-        plt.subplot(1, 3, 1)
-        plt.title("Input Image")
-        plt.imshow(image)
-        plt.axis("off")
-        plt.subplot(1, 3, 2)
-        plt.title("Ground Truth Mask")
-        plt.imshow(mask.squeeze(), cmap="gray")
-        plt.axis("off")
-        plt.subplot(1, 3, 3)
-        plt.title("Predicted Mask")
-        plt.imshow(pred_bin_mask_pro, cmap="gray")
-        plt.axis("off")
+        fig, axes = plt.subplots(1, 3, figsize=(15, 6))  # 1 row, 3 columns
+
+        # Display Input Image
+        axes[0].imshow(image)
+        axes[0].set_title("Input Image")
+        axes[0].axis("off")
+
+        # Display Ground Truth Mask
+        axes[1].imshow(mask.squeeze().cpu().numpy(), cmap="gray")
+        axes[1].set_title("Ground Truth Mask")
+        axes[1].axis("off")
+
+        # Display Predicted Mask
+        axes[2].imshow(prd_masks.squeeze().cpu().numpy(), cmap="gray")
+        axes[2].set_title("Predicted Mask")
+        axes[2].axis("off")
+
+        # Adjust layout
         plt.tight_layout()
         plt.show()
-
         if shown >= 9:
             break

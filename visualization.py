@@ -33,29 +33,33 @@ def visualize_points_on_mask(mask_path, input_points, input_labels):
 
 if __name__ == "__main__":
 
-    with open("./configs/config.yaml", "r") as f:
+    with open("./configs/preprocess_config.yaml", "r") as f:
         config = yaml.safe_load(f)
 
     GT_MASK = config["gt_mask"]
     PROMPTS_PATH = config["prompts_path"]
 
-    masks_root = os.path.normpath(os.path.join(GT_MASK))
-    prompts_root = os.path.normpath(os.path.join(PROMPTS_PATH))
+    masks_root = os.path.normpath(GT_MASK)
+    prompts_root = os.path.normpath(PROMPTS_PATH)
 
-    subfolders = [
-        f for f in os.listdir(masks_root) if os.path.isdir(os.path.join(masks_root, f))
+    # List all mask files in the flat masks_root
+    mask_files = [
+        f
+        for f in os.listdir(masks_root)
+        if f.lower().endswith((".png", ".jpg", ".jpeg"))
     ]
 
-    if not subfolders:
-        print("No mask subfolders found.")
+    if not mask_files:
+        print(f"[WARNING] No mask files found in {masks_root}")
         exit()
 
-    # Pick 5 random folders
-    chosen_folders = random.sample(subfolders, min(5, len(subfolders)))
+    # Pick 5 random mask files
+    chosen_masks = random.sample(mask_files, min(5, len(mask_files)))
 
-    for folder in chosen_folders:
-        mask_dir = os.path.join(masks_root, folder)
-        prompt_file = os.path.join(prompts_root, f"{folder}.json")
+    for mask_file in chosen_masks:
+        mask_path = os.path.join(masks_root, mask_file)
+        base_name, _ = os.path.splitext(mask_file)
+        prompt_file = os.path.join(prompts_root, base_name + ".json")
 
         if not os.path.exists(prompt_file):
             print(f"[WARNING] Missing prompt file: {prompt_file}")
@@ -65,21 +69,6 @@ if __name__ == "__main__":
             prompt_data = json.load(f)
             input_points = prompt_data.get("input_points", [])
             input_labels = prompt_data.get("input_labels", [])
-
-        # Get all mask image files
-        mask_files = [
-            f
-            for f in os.listdir(mask_dir)
-            if f.lower().endswith((".png", ".jpg", ".jpeg"))
-        ]
-
-        if not mask_files:
-            print(f"[WARNING] No mask files in {mask_dir}")
-            continue
-
-        # Pick 1 random mask per folder to show
-        chosen_mask = random.choice(mask_files)
-        mask_path = os.path.join(mask_dir, chosen_mask)
 
         print(f"[INFO] Showing: {mask_path}")
         visualize_points_on_mask(mask_path, input_points, input_labels)

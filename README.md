@@ -1,93 +1,274 @@
-# Sam2.1_fine_tuning_for_any_class_object
+# SAM2 Sidewalk Training
 
+This repository contains code for training and fine-tuning the SAM2 model on sidewalk segmentation datasets. It includes data loading, augmentation, training, checkpointing, and evaluation utilities.
 
+---
 
-## Getting started
+## Table of Contents
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+- [Project Structure](#project-structure)
+- [Installation](#installation)
+- [Preprocessing](#preprocessing)
+- [Visualization](#visualization)
+- [Configuration](#configuration)
+- [Training Parameters](#training-parameters)
+- [How to Set Training Parameters](#how-to-set-training-parameters)
+- [Training](#training)
+- [Resuming from Checkpoint](#resuming-from-checkpoint)
+- [Inference](#inference)
+- [Acknowledgements](#acknowledgements)
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+---
 
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+## Project Structure
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.rrze.fau.de/fe30wafi/sam2.1_fine_tuning_for_sidewalk_segmentation.git
-git branch -M main
-git push -uf origin main
+sidewalk_training/
+├── checkpoints/           # Pretrained model checkpoints
+├── configs/               # YAML config files
+├── dataset/               # Dataset folder
+├── images/                # Example images
+├── logs/                  # TensorBoard logs
+├── models/                # Saved models/checkpoints
+├── results/               # Output results
+├── sam2/                  # SAM2 model code
+├── scripts/               # Utility scripts (dataloader, parameters, trainer, etc.)
+├── train.py               # Main training script
+├── inference.py           # Inference script
+├── preprocess.py          # Preprocessing script
+├── visualization.py       # Visualization utilities
+├── requirements.txt       # Python dependencies
+└── README.md              # This file
 ```
 
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.rrze.fau.de/fe30wafi/sam2.1_fine_tuning_for_sidewalk_segmentation/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+---
 
 ## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+1. **Create a virtual environment:**
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+   ```bash
+   python -m venv venv
+   ```
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+2. **Activate the virtual environment:**
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+   ```bash
+   venv/Scripts/Activate
+   ```
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+3. **Clone the repository:**
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+   ```bash
+   git clone <your-repo-url>
+   cd sidewalk_training
+   ```
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+4. **Install dependencies:**
 
-## License
-For open source projects, say how it is licensed.
+   ```bash
+   git clone <your-repo-url>
+   cd sidewalk_training
+   ```
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+5. **Install dependencies:**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+6. **Download pretrained_models of Sam2.1 (tiny, small, base and large versions):**
+
+   ```bash
+   cd sam2/pretrained_models
+   bash download_ckpts.sh
+   cd ..
+   ```
+
+7. **Place your dataset in a folder named `dataset/`.** (Similar to how it is shown in the screenshot below)
+
+   ![image info](images/Screenshot_2025-05-29_214606.png)
+
+8. **Update the dataset paths in `preprocess.py` using the appropriate config file from the `configs/` directory.**
+
+   _Note: After running the preprocess.py script, it will create a preprocessed version of the same dataset. As shown in the screenshot above, e.g., "SENSATION_DS_Preprocessed"._
+
+   ```bash
+   cd sam2/pretrained_models
+   bash download_ckpts.sh
+   cd ..
+   ```
+
+9. **Place your dataset in a folder named `dataset/`.** (Similar to how it is shown in the screenshot below)
+
+   ![image info](images/Screenshot_2025-05-29_214606.png)
+
+10. **Update the dataset paths in `preprocess.py` using the appropriate config file from the `configs/` directory.**
+
+    _Note: After running the preprocess.py script, it will create a preprocessed version of the same dataset. As shown in the screenshot above, e.g., "SENSATION_DS_Preprocessed"._
+
+---
+
+## Preprocessing
+
+Run the preprocessing script to resize images, create masks, and generate prompt JSONs.
+
+```bash
+python preprocess.py
+```
+
+This will create a new `preprocessed/` directory with the following:
+
+- Resized images
+- Masks
+- JSON files which contain Point Prompts (Positive and Negative Points)
+
+## Visualization
+
+You can visualize the selected prompt points and their overlay on masks using:
+
+```bash
+python visualization.py
+```
+
+This is helpful for verifying prompt generation strategies.
+
+## Configuration
+
+Edit the YAML config files in `configs/` to set dataset paths, model configs, and other initialization parameters.  
+For example, `configs/initialize_config.yaml`:
+
+```yaml
+TRAIN_MANIFEST: "dataset/SENSATION_DS/train_manifest.json"
+VAL_MANIFEST: "dataset/SENSATION_DS/val_manifest.json"
+CONFIG_PATH: "sam2/configs/sam2.1"
+CONFIG_NAME: "sam2.1_hiera_base_plus.yaml"
+PRETRAINED_MODEL_PATH: "checkpoints"
+MODEL_NAME: "sam2.1_hiera_base_plus.pt"
+CHECKPOINT_PATH: "models"
+```
+
+---
+
+## Training Parameters
+
+All training hyperparameters are managed by the [`TrainingParams`](scripts/parameters.py) class in [`scripts/parameters.py`](scripts/parameters.py).  
+You can set or override these parameters in your `train.py` script.
+
+**Default parameters include:**
+
+- `output_dir`: Directory to save models/checkpoints
+- `logging_dir`: Directory for TensorBoard logs
+- `logging_steps`: Steps between logging
+- `gradient_accumulation_steps`: Gradient accumulation steps
+- `total_steps`: Total training steps
+- `learning_rate`: Learning rate
+- `warmup_steps`: Warmup steps
+- `weight_decay`: Weight decay
+- `fp16`: Use FP16 mixed precision (bool)
+- `bf16`: Use BF16 mixed precision (bool)
+- `save_steps`: Steps between checkpoints
+- `eval_steps`: Steps between evaluations
+- `save_total_limit`: Max number of checkpoints to keep
+- `load_best_model_at_end`: Load best model at end (bool)
+- `greater_is_better`: If higher metric is better (bool)
+- `train_prompt_encoder`: Train prompt encoder (bool)
+- `train_mask_decoder`: Train mask decoder (bool)
+- `bce_weight`, `dice_weight`, `score_weight`: Loss weights
+
+See [`scripts/parameters.py`](scripts/parameters.py) for the full list and defaults.
+
+---
+
+## How to Set Training Parameters
+
+You can set training parameters in your `train.py` like this:
+
+```python
+from scripts.parameters import TrainingParams
+
+training_args = TrainingParams(
+    output_dir="models",
+    logging_dir="logs",
+    logging_steps=100,
+    gradient_accumulation_steps=8,
+    total_steps=5000,
+    learning_rate=3e-5,
+    warmup_steps=500,
+    weight_decay=0.01,
+    fp16=True,                # Use FP16 mixed precision
+    bf16=False,               # Or set to True for BF16
+    save_steps=100,
+    eval_steps=100,
+    save_total_limit=2,
+    load_best_model_at_end=True,
+    greater_is_better=True,
+    train_prompt_encoder=True,
+    train_mask_decoder=True,
+    bce_weight=0.2,
+    dice_weight=0.5,
+    score_weight=0.3,
+)
+```
+
+You can also load parameters from a YAML or JSON file and pass them as keyword arguments:
+
+```python
+import yaml
+with open("configs/training_params.yaml") as f:
+    params_dict = yaml.safe_load(f)
+training_args = TrainingParams(**params_dict)
+```
+
+---
+
+## Training
+
+To start training, run:
+
+```bash
+accelerate launch train.py
+```
+
+The script will automatically look for the latest checkpoint in your checkpoint directory and resume training if found.
+
+---
+
+## Resuming from Checkpoint
+
+The training script will automatically resume from the latest checkpoint in the directory specified by `CHECKPOINT_PATH` in your config.  
+If no checkpoint is found, training starts from scratch.
+
+---
+
+## Inference
+
+After training, use `inference.py` to run predictions on new images.  
+Refer to the script and model documentation for usage.
+
+---
+
+## Streamlit Application
+
+You can launch the streamlit app using:
+
+```bash
+streamlit run Streamlit_App.py
+```
+
+This will allow you to visualize the performance of the trained model, in two ways
+
+1. Via Upload of Image and Point Prompts
+2. Via Test Dataset Sample
+
+   ![image info](images/Preview.png)
+
+## Acknowledgements
+
+- [Meta Research SAM2](https://github.com/facebookresearch/sam2)
+- [PyTorch](https://pytorch.org/)
+- [HuggingFace Accelerate](https://github.com/huggingface/accelerate)
+
+---
+
+**For questions or issues, please open an issue on this repository.**

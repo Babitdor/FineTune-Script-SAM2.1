@@ -1,0 +1,12 @@
+# Dataset Path
+TRAIN_MANIFEST: "dataset/SENSATION_DS_Preprocessed/training/manifest_training.csv"
+VAL_MANIFEST: "dataset/SENSATION_DS_Preprocessed/validation/manifest_validation.csv"
+
+# Model configurations
+PRETRAINED_MODEL_PATH: "sam2/pretrained_models"
+MODEL_NAME: sam2.1_hiera_base_plus.pt
+CONFIG_PATH: "configs/sam2.1"
+CONFIG_NAME: sam2.1_hiera_b+.yaml
+
+# Checkpoint Path
+CHECKPOINT_PATH: "models/checkpoint"
