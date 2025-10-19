@@ -1,0 +1,63 @@
+# config.yaml - Template for Fine-Tuning SAM 2.1 with LoRA
+
+# === Dataset Configuration ===
+# Path to your dataset root directory.
+DATA_PATH: "dataset/your_dataset_folder"
+
+# === Model Configuration ===
+# Path to your pre-downloaded SAM 2.1 pretrained weights.
+PRETRAINED_MODEL_PATH: "sam2/pretrained_models"
+
+# Name of the .pt model checkpoint (e.g., base, large, HQ).
+MODEL_NAME: "sam2.1_hiera_base_large.pt"
+
+# Path to the model configuration (.yaml) describing the model's architecture.
+CONFIG_PATH: "configs/sam2.1"
+
+# Name of the specific configuration file (e.g., Hiera-based or HQ settings).
+CONFIG_NAME: "sam2.1_hiera_l.yaml"
+
+# === Checkpoint Saving ===
+# Where to save fine-tuned model checkpoints.
+CHECKPOINT_PATH: "models/checkpoint"
+
+# === Training Parameters ===
+Training_parameters:
+  # Directories
+  output_dir: "models" # Directory for model outputs
+  logging_dir: "logs" # Directory for training logs
+
+  # Logging and Evaluation
+  logging_steps: 100 # Log every N steps
+  eval_steps: 100 # Evaluate model every N steps
+  save_steps: 100 # Save checkpoint every N steps
+  save_total_limit: 2 # Keep only the latest N checkpoints
+  load_best_model_at_end: true # Restore best checkpoint at the end
+  greater_is_better: true # Whether higher metric (IoU) is better
+
+  # Optimization
+  learning_rate: 1e-5
+  weight_decay: 0.001
+  warmup_steps: 500
+  total_steps: 5000
+  gradient_accumulation_steps: 8
+  fp16: true # Use mixed precision for faster training
+
+  # Module Selection for Training
+  train_prompt_encoder: false
+  train_mask_decoder: false
+  train_image_encoder: false
+  unfreeze: false # Set to true to unfreeze additional layers manually
+
+  # Prompting Strategy
+  point_strategy: "gaussian" # Options: "random", "grid", "laplace"
+  num_pts: 4 # Number of input points for prompts
+  score_weight: 0.05 # Loss contribution from mask score prediction
+
+  # LoRA Configuration
+  use_lora: true
+  lora_image_encoder: false # Apply LoRA to image encoder
+  lora_mask_decoder: true # Apply LoRA to mask decoder
+  lora_r: 16 # Rank for LoRA low-rank matrices
+  lora_alpha: 32 # Scaling factor
+  lora_dropout: 0.1 # Dropout applied to LoRA layers

@@ -1,12 +1,40 @@
 # Dataset Path
-TRAIN_MANIFEST: "dataset/SENSATION_DS_Preprocessed/training/manifest_training.csv"
-VAL_MANIFEST: "dataset/SENSATION_DS_Preprocessed/validation/manifest_validation.csv"
+DATA_PATH: "dataset/SENSATION_DS"
 
 # Model configurations
 PRETRAINED_MODEL_PATH: "sam2/pretrained_models"
 MODEL_NAME: sam2.1_hiera_base_plus.pt
 CONFIG_PATH: "configs/sam2.1"
-CONFIG_NAME: sam2.1_hiera_b+.yaml
+CONFIG_NAME: sam2.1_hiera_l.yaml
 
 # Checkpoint Path
 CHECKPOINT_PATH: "models/checkpoint"
+
+Training_parameters:
+  output_dir: "models"
+  logging_dir: "logs"
+  logging_steps: 100
+  gradient_accumulation_steps: 8
+  total_steps: 8000
+  learning_rate: 1e-4 # For LoRA lower LR to 5e-5 or 1e-5
+  min_lr: 1e-5 # For LoRA 1e-6
+  warmup_steps: 1000
+  weight_decay: 0.0001
+  fp16: true
+  save_steps: 100
+  eval_steps: 100
+  save_total_limit: 1
+  load_best_model_at_end: true
+  greater_is_better: true
+  train_prompt_encoder: true # Full fine-tuning for prompt encoder
+  train_mask_decoder: true # Full fine-tuning for mask decoder
+  train_image_encoder: false # Full fine-tuning for image encoder
+  point_strategy: "gaussian"
+  num_pts: 5
+  score_weight: 0.05
+  use_lora: false # Toggle LoRA vs. full fine-tuning
+  lora_image_encoder: true # Apply LoRA to image encoder
+  lora_mask_decoder: true # Apply LoRA to mask decoder
+  lora_r: 16
+  lora_alpha: 32
+  lora_dropout: 0.1
