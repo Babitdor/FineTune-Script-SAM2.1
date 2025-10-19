@@ -1,4 +1,4 @@
-# SAM2 Sidewalk Training
+# SAM2 - Fine-Tuning on Multi-Class Masks for improvement of official SENSATION dataset.
 
 This repository contains code for training and fine-tuning the SAM2 model on sidewalk segmentation datasets. It includes data loading, augmentation, training, checkpointing, and evaluation utilities.
 
@@ -80,8 +80,22 @@ sidewalk_training/
    cd ..
    ```
 
-7. Place your dataset in a folder named `dataset/`, which should include two subfolders: `images` (for input images) and `masks` (for corresponding segmentation masks).
-   This structure is illustrated in the screenshot below.
+   or 
+   
+   You can access already uploaded pretrained models of SAM2 in the following path 
+
+   ```bash
+   sam2/pretrained_models
+   ```
+
+   which consist of : 
+   - sam2.1_hiera_large.pt
+   - sam2.1_hiera_base_plus.pt
+   - sam2.1_hiera_small.pt
+   - sam2.1_hiera_tiny.pt
+
+7. Place your dataset in a folder named `dataset/`, which should include two subfolders: `images` (for input images) and `masks` (for corresponding segmentation masks). 
+This structure is illustrated in the screenshot below.
 
    ![image info](images/Screenshot_2025-05-29_214606.png)
 
